@@ -14,9 +14,9 @@ if st.button("Analyze"):
         with st.spinner("Analyzing..."):
             quality = score_quality(text_input)
             toxicity = score_toxicity(text_input)
-        
+
         st.success("✔️ Analysis Completed")
-        
+
         col1, col2 = st.columns(2)
         with col1:
             st.markdown("### 🟩 Quality")
@@ -34,12 +34,13 @@ if st.button("Analyze"):
             st.write(f"Label: **{toxicity['label']}**")
             st.info(toxicity['explanation'])
 
-            # Tüm toksik kelimeleri burada göster
-            if toxicity.get("toxic_words"):
-                st.markdown("**Detected Toxic Words:**")
-                st.write(", ".join(toxicity["toxic_words"]))
+            
+            if toxicity.get("detected_toxic_phrases"):
+                st.markdown("**Detected Toxic Phrase(s) by Model:**")
+                for phrase in toxicity["detected_toxic_phrases"]:
+                    st.write(f"> {phrase}")
 
-        # Otomatik öneri bölümü
+        
         advice = []
         if quality['quality_score'] < 80:
             advice.append("• Improve grammar or spelling.")
@@ -49,8 +50,8 @@ if st.button("Analyze"):
             advice.append("• Consider removing harmful language.")
 
         if advice:
-            st.markdown("### Improvement Advice")
+            st.markdown("Improvement Advice")
             for line in advice:
                 st.write(line)
         else:
-            st.markdown("### Your text looks good!")
+            st.markdown("Your text looks good!")
